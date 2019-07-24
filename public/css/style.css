@@ -1,0 +1,22 @@
+@media (min-width: 970px) {
+    .container {
+        width: 970px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin: 0 0 250px;
+}
+
+.carousel-slider .slide-image{
+    height: 682px;
+}
+
+.pagination{
+    padding-left:15px;
+}
