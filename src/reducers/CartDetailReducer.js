@@ -1,6 +1,7 @@
 export default (state = {}, action) => {
     switch (action.type) {
         case 'CART_DETAILS':
+            localStorage.setItem('cartDetails', JSON.stringify(action.payload));
             return {
                 ...state,
                 cartDetails: action.payload,

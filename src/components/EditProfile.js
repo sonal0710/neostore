@@ -70,7 +70,7 @@ class EditProfile extends Component{
     render(){
         return(
             <div className="container">
-                {/* {(this.props.userProfileStatus) && <Redirect to="/profile" /> } */}
+                {(this.props.userProfileStatus) && <Redirect to="/profile" /> }
                 <div className="container">
                 <div className="container-fluid">
                     <UserProfileMenu />

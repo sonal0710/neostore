@@ -85,3 +85,10 @@ export const getOrderHistoryDetails = () => dispatch => {
         })
     })
 }
+
+export const setFalseFlag = () => dispatch => {
+    dispatch({
+        type: 'UPDATE_PROFILE_ERROR',
+        payload: false,
+    })
+}

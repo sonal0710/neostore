@@ -125,8 +125,8 @@ const AllProductList = ({ allProducts, resetFilters, sortFunction, addToCart, pa
     );
 }
 class ListAllProduct extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
         this.state = {
             category_id:'',
             color_id: '',
@@ -141,12 +141,14 @@ class ListAllProduct extends Component{
         this.handlePageChange = this.handlePageChange.bind(this);
     }
     componentWillMount(){
+        this.props.loader(true);
         this.props.getAllCategories();
         this.props.getAllColors();
         this.props.getAllProducts(this.state);
         this.props.totalProductCount(this.state);
     }
     categoryColorSortHandler(e){
+        this.props.loader(true);
         let name = e.target.name;
         let value = e.target.getAttribute(name);
         this.setState({
@@ -157,6 +159,7 @@ class ListAllProduct extends Component{
         })
     }
     resetFilters(){
+        this.props.loader(true);
         this.setState({
             category_id:'',
             color_id: '',
@@ -169,6 +172,7 @@ class ListAllProduct extends Component{
         });
     }
     sortProducts(e){
+        this.props.loader(true);
         let sortBy = e.target.name;
         let order = e.target.getAttribute('orderby');
         this.setState({
@@ -180,6 +184,7 @@ class ListAllProduct extends Component{
         });
     }
     addToCartHandler(product){
+        this.props.loader(true);
         var cart = [];
         let new_obj = JSON.parse(JSON.stringify(product));
         cart.push(new_obj);
@@ -191,11 +196,13 @@ class ListAllProduct extends Component{
         }
     }
     componentWillReceiveProps(newProps){
+        this.props.loader(false);
         if(newProps.addCartFlag){
             notify.show("Product successfully added to cart", 'success', 1000);
         }
     }
     handlePageChange(pageNumber){
+        this.props.loader(true);
         this.setState({
             activePage: pageNumber
         }, () => {

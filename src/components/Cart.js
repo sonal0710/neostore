@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { addToCart, deleteFromCart } from '../actions/CartDetailAction';
 import Notifications, { notify } from 'react-notify-toast';
 import { Link } from 'react-router-dom';
-import Loader from 'react-loader';
 
 const CartTotal = ({ cartDetails }) => {
     let price = 0;
@@ -39,7 +38,7 @@ const CartTotal = ({ cartDetails }) => {
                     </div>            
                 </div>
                 <div className="panel-footer">
-                    <Link type="button" to="/address" className="btn btn-primary btn-lg btn-block" disabled={cartCount === 0}>Checkout</Link>
+                    <Link type="button" to="/checkaddress" className="btn btn-primary btn-lg btn-block" disabled={cartCount === 0}>Checkout</Link>
                 </div>
             </div>
         </div>
@@ -49,17 +48,18 @@ const CartTotal = ({ cartDetails }) => {
 class Cart extends Component{
     constructor(){
         super();
-        this.state = {
-            loaded:true
-        }
         this.updateCartQuantity = this.updateCartQuantity.bind(this);
         this.deleteProductFromCart = this.deleteProductFromCart.bind(this);
     }
     componentWillMount(){
+        this.props.loader(true);
         this.props.getAllCartDetails();
+        
     }
     updateCartQuantity(productDetail, qty){
+        this.props.loader(true);
         if(qty === 0){
+            this.props.loader(false);
             notify.show("Quantity can't be zero", 'error', 1000);
         }else{
             let details = productDetail.product_id;
@@ -72,19 +72,23 @@ class Cart extends Component{
         }
     }
     componentWillReceiveProps(newProps){
+        this.props.loader(false);
         if(newProps.deleleCartFlag){
             notify.show("Product successfully deleted from cart", 'success', 1000);
+            this.props.getAllCartDetails();
         }
-        this.props.getAllCartDetails();
+        if(newProps.addCartFlag){
+            this.props.getAllCartDetails();
+        }
     }
     deleteProductFromCart(productId){
+        this.props.loader(true);
         this.props.deleteFromCart(productId);
     }
     render(){
         return(
             <div className="container">
                 <Notifications options={{zIndex: 180, top: '90px'}} />
-                {/* <Loader loaded={this.state.loaded}> */}
                 <div className="row">
                     <div className="col-md-8">
                         <table className="table table-hover">
@@ -102,13 +106,13 @@ class Cart extends Component{
                                     <tr key={i}>
                                         <td className="col-sm-8 col-md-6">
                                             <div className="media">
-                                                <div className="media-left col-sm-4">
-                                                    <a><img className="media-object cover" src={process.env.REACT_APP_API_URL+"/"+cartProduct.product_id.product_image[0]}/></a>
+                                                <div className="col-sm-4">
+                                                    <Link to={"/productDetails/"+cartProduct.product_id.product_id}><img className="media-object cover" src={process.env.REACT_APP_API_URL+"/"+cartProduct.product_id.product_image[0]}/></Link>
                                                 </div>
                                                 
                                                 <div className="media-body">
-                                                    <h4 className="media-heading"><a>{cartProduct.product_id.product_name}</a></h4>
-                                                    <h5 className="media-heading"> by <a><small>{cartProduct.product_id.product_producer}</small></a></h5>
+                                                    <h4 className="media-heading"><Link to={"/productDetails/"+cartProduct.product_id.product_id}>{cartProduct.product_id.product_name}</Link></h4>
+                                                    <h5 className="media-heading"> by <small>{cartProduct.product_id.product_producer}</small></h5>
                                                     <span>Status: </span><span className="text-success"><strong>{(cartProduct.product_id.product_stock != 0) ? 'In Stock' : 'Out of Stock'}</strong></span>
                                                 </div>
                                             </div>
@@ -130,8 +134,8 @@ class Cart extends Component{
                     </div>
                     <CartTotal cartDetails={this.props.cartDetails}/>
                 </div>
-                {/* </Loader> */}
             </div>
+            // </LoadingOverlay>
         );
     }
 }
@@ -139,7 +143,8 @@ class Cart extends Component{
 const mapStateToProps = (state) => {
     return {
         cartDetails: state.CartDetailReducer.cartDetails,
-        deleleCartFlag: state.CartDetailReducer.deleleCartFlag
+        deleleCartFlag: state.CartDetailReducer.deleleCartFlag,
+        addCartFlag: state.CartDetailReducer.addCartFlag
     }
 }
 const mapDispatchToProps = (dispatch) => {

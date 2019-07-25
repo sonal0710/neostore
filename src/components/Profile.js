@@ -2,8 +2,13 @@ import React, { Component } from 'react';
 import '../../public/css/user.css';
 import UserProfileMenu from './UserProfileMenu';
 import { Link } from 'react-router-dom';
+import { setFalseFlag } from '../actions/UserProfileAction';
+import { connect } from 'react-redux';
 
 class Profile extends Component{
+    componentWillMount(){
+        this.props.setFalseFlag();
+    }
     render(){
         return(
             <div className="container">
@@ -57,4 +62,9 @@ class Profile extends Component{
     }
 }
 
-export default Profile;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setFalseFlag: () => { dispatch(setFalseFlag()) }
+    }
+}
+export default connect(null, mapDispatchToProps)(Profile);

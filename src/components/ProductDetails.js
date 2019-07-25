@@ -124,7 +124,7 @@ class ProductDetails extends Component {
                     <div className="col-md-6">
                         <div className="preview">
                         <div className="preview-pic tab-content">
-                            <div className="my-img active"><Magnifier className="actual-img" src={this.props.productDetails ? process.env.REACT_APP_API_URL+"/"+this.props.productDetails.product_image[0] : ''}/></div>
+                            <div className="my-img active"><Magnifier className="actual-img" height={250} src={this.props.productDetails ? process.env.REACT_APP_API_URL+"/"+this.props.productDetails.product_image[0] : ''}/></div>
                         </div>
                         <br />
                         <ul className="preview-thumbnail nav nav-tabs">

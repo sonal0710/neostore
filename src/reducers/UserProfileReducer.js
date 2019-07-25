@@ -44,7 +44,7 @@ export default (state = {}, action) => {
         case 'ORDER_HISTORY':
             return {
                 ...state,
-                orderHistoryDetails: action.payload
+                orderHistoryDetails: action.payload.product
             }
         case 'ORDER_HISTORY_ERROR':
             return {
