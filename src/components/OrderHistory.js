@@ -21,12 +21,13 @@ class OrderHistory extends Component{
                     <div className="col-md-9">
                     {(this.props.orderHistoryDetails != undefined) ? this.props.orderHistoryDetails.map((orderDetails,i) => (
                         <div className="panel panel-default" key={i}>
+                            {console.log(orderDetails)}
                             <div className="panel-heading text-muted">
                             <span className="text-warning"><strong>TRANSIT</strong></span><br/>
                             <span><b>Order No:</b> {orderDetails.products[0].order_id}</span>
                             <div>
                                 <small><b>Placed on:</b> {new Date(orderDetails.products[0].created_at).toDateString("yyyy-MM-dd")} / </small>
-                                <small className="text-success"><strong>₹{orderDetails.products[0].cart_cost}</strong></small>
+                                <small className="text-success"><strong>₹{(orderDetails.products[0].cart_cost) ? orderDetails.products[0].cart_cost : orderDetails.products[0].total_cost}</strong></small>
                             </div>
                             <hr/>
                             </div>

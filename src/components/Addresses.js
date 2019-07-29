@@ -45,7 +45,12 @@ class Addresses extends Component{
                                     </div>
                                     <div className="panel-footer">
                                         {/* <input type="radio" name="address"/> Select &nbsp; */}
-                                        <Link to={"/edit_address/"+userAdd._id} type="button" className="btn btn-primary">Edit</Link> &nbsp;
+                                        <Link to={{
+                                            pathname:"/edit_address/"+userAdd._id,
+                                            state: {
+                                                flag: true
+                                            }
+                                        }} type="button" className="btn btn-primary">Edit</Link> &nbsp;
                                         <button address_id={userAdd._id} type="button" className="btn btn-danger" onClick={this.deleteAddress}>Delete</button>
                                     </div>
                                 </div>
@@ -53,7 +58,12 @@ class Addresses extends Component{
                         </div>            
                         <div className="panel-footer">
                         <hr/>
-                        <Link to="/add_address" type="button" className="btn btn-md btn-default btn-lg">Add new</Link>
+                        <Link to={{
+                            pathname: "/add_address",
+                            state: {
+                                flag: true
+                            }
+                        }} type="button" className="btn btn-md btn-default btn-lg">Add new</Link>
                         </div>
                     </div>
 

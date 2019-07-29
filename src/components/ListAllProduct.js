@@ -69,13 +69,13 @@ const AllProductList = ({ allProducts, resetFilters, sortFunction, addToCart, pa
                     <li className="nav-item" id="nav-item-id">
                         <a className="nav-link" href="#tab2" aria-controls="tab2" role="tab" data-toggle="tab" name="product_cost" orderby="desc" onClick={sortFunction}>
                             <i className="fa fa-inr" aria-hidden="true"></i>
-                            <i className="fa fa-arrow-up" aria-hidden="true"></i>
+                            <i className="fa fa-arrow-down" aria-hidden="true"></i>
                         </a>
                     </li>
                     <li className="nav-item" id="nav-item-id">
                         <a className="nav-link" href="#tab3" aria-controls="tab3" role="tab" data-toggle="tab" name="product_cost" orderby="asc" onClick={sortFunction}>
                             <i className="fa fa-inr" aria-hidden="true"></i>
-                            <i className="fa fa-arrow-down" aria-hidden="true"></i>
+                            <i className="fa fa-arrow-up" aria-hidden="true"></i>
                         </a>
                     </li>
                     </ul>

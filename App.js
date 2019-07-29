@@ -75,7 +75,7 @@ class App extends Component {
                             <Route path = '/profile' render={(props) => (localStorage.getItem('loginstatus') ? <Profile loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/edit_profile' render={(props) => (localStorage.getItem('loginstatus') ? <EditProfile loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/address' render={(props) => (localStorage.getItem('loginstatus') ? <Addresses loader={this.loaderHandler} /> : (<Redirect to="/login" />))}/>
-                            <Route path = '/add_address' render={(props) => (localStorage.getItem('loginstatus') ? <AddAddress loader={this.loaderHandler} /> : (<Redirect to="/login" />))}/>
+                            <Route path = '/add_address' render={(props) => (localStorage.getItem('loginstatus') ? <AddAddress {...props} loader={this.loaderHandler} /> : (<Redirect to="/login" />))}/>
                             <Route path = '/edit_address/:id' render={(props) => (localStorage.getItem('loginstatus') ? <EditAddress {...props} loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/cart' render={(props) => (localStorage.getItem('loginstatus') ? <Cart loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/checkaddress' render={(props) => (localStorage.getItem('loginstatus') ? <CheckoutAddress loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>

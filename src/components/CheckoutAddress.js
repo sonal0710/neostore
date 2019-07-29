@@ -32,9 +32,12 @@ class CheckoutAddress extends Component{
     placeOrder(){
         var cart = [];
         let new_obj = JSON.parse(localStorage.getItem('cartDetails'));
-        { new_obj != undefined ? new_obj.map((item, index)=> cart.push(item.product_id) ):''}
+        { new_obj != undefined ? new_obj.map((item, index)=> (
+            item.product_id.count = item.count ,
+            cart.push(item.product_id) )):''}
         cart.push({address_id: this.state.delieveryAdd});
         cart.push({flag: true});
+        console.log(cart);
         this.setState({
             redirect: true
         }, () => {
@@ -61,7 +64,12 @@ class CheckoutAddress extends Component{
                                 </div>
                                 <div className="panel-footer">
                                     <input type="radio" address_id={userAdd._id} name="address" onChange={this.changeHandler}/> Select &nbsp;&nbsp;
-                                    <Link to={"/edit_address/"+userAdd._id} type="button" className="btn btn-primary"> Edit</Link>
+                                    <Link to={{
+                                        pathname:"/edit_address/"+userAdd._id,
+                                        state: {
+                                            flag: false
+                                        }
+                                    }} type="button" className="btn btn-primary"> Edit</Link>
                                 </div>
                             </div>
                         )) : ''}
@@ -69,7 +77,12 @@ class CheckoutAddress extends Component{
                     <div className="panel-footer">
                         <hr/>
                         <button type="button" className="btn btn-success btn-md pull-right" disabled={(this.state.checked == false)} onClick={this.placeOrder}> Place Order <i className="fa fa-angle-double-right"></i></button>
-                        <Link to="/add_address" type="button" className="btn btn-default btn-md"> Add New <i className="fa fa-plus"></i></Link>
+                        <Link to={{
+                            pathname: "/add_address",
+                            state: {
+                                flag: false
+                            }
+                        }} type="button" className="btn btn-default btn-md"> Add New <i className="fa fa-plus"></i></Link>
                     </div>
                 </div>
 

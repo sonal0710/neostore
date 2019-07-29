@@ -17,8 +17,9 @@ const required = (value) => {
 };
 
 class AddAddress extends Component{
-    constructor(){
-        super();
+    constructor(props){
+        super(props);
+        console.log(this.props.location.state.flag);
         this.state = {
             address:'',
             pincode:'',
@@ -47,7 +48,8 @@ class AddAddress extends Component{
     render(){
         return(
             <div className="container">
-                {(this.props.addAddressStatus && this.props.addAddressStatus != undefined) && <Redirect to="/address" />}
+                {(this.props.addAddressStatus && this.props.addAddressStatus != undefined && this.props.location.state.flag) && <Redirect to="/address" />}
+                {(this.props.addAddressStatus && this.props.addAddressStatus != undefined && (this.props.location.state.flag === false)) && <Redirect to="/checkaddress" />}
                 <div className="container">
                 <div className="container-fluid">
                     <UserProfileMenu />

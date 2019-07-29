@@ -6,7 +6,8 @@ export default (state = {}, action) => {
                 productDetails: action.payload.product[0],
                 updateRating: false,
                 errorRating: '',
-                successRating: ''
+                successRating: '',
+                setFlagForProps: true
             }
         case 'UPDATE_RATING':
             return {

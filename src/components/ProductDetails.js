@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getProductDetails, productRating } from '../actions/ProductsDetailAction';
+import { getProductDetails, productRating, setFlagFalse } from '../actions/ProductsDetailAction';
 import '../../public/css/product-details.css';
 import StarRatingComponent from 'react-star-rating-component';
 import Notifications, { notify } from 'react-notify-toast';
@@ -70,6 +70,7 @@ class ProductDetails extends Component {
         this.addToCartHandler = this.addToCartHandler.bind(this);
     }
     componentWillMount(){
+        this.props.loader(true);
         let productId = this.props.match.params.id;
         this.setState({ product_id: productId });
         this.props.getProductDetails(productId);
@@ -86,6 +87,10 @@ class ProductDetails extends Component {
         });
     }
     componentWillReceiveProps(newProps){
+        if(newProps.setFlagForProps){
+            this.props.loader(false);
+            this.props.setFlagFalse();
+        }
         if(newProps.updateRating){
             this.props.getProductDetails(this.state.product_id);
             if(newProps.errorRating != undefined && newProps.errorRating != ''){
@@ -101,6 +106,7 @@ class ProductDetails extends Component {
         }
     }
     rateProduct(){
+        this.props.loader(true);
         this.props.productRating(this.state);
         this.setState({ showModal: false });
     }
@@ -213,7 +219,8 @@ const mapStateToProps = (state) => {
         errorRating: state.ProductsDetailReducer.errorRating,
         successRating: state.ProductsDetailReducer.successRating,
         updateRating: state.ProductsDetailReducer.updateRating,
-        addCartFlag: state.CartDetailReducer.addCartFlag
+        addCartFlag: state.CartDetailReducer.addCartFlag,
+        setFlagForProps: state.ProductsDetailReducer.setFlagForProps
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -221,7 +228,8 @@ const mapDispatchToProps = (dispatch) => {
         getProductDetails: (id) => { dispatch(getProductDetails(id)) },
         productRating: (ratingDetails) => { dispatch(productRating(ratingDetails)) },
         addToCart: (cartData) => { dispatch(addToCart(cartData)) },
-        setFlagStatus: () => { dispatch(setFlagStatus()) }
+        setFlagStatus: () => { dispatch(setFlagStatus()) },
+        setFlagFalse: () => { dispatch(setFlagFalse()) }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetails);
