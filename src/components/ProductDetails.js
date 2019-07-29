@@ -5,7 +5,7 @@ import '../../public/css/product-details.css';
 import StarRatingComponent from 'react-star-rating-component';
 import Notifications, { notify } from 'react-notify-toast';
 import Magnifier from "react-magnifier";
-import { addToCart } from '../actions/CartDetailAction';
+import { addToCart, setFlagStatus } from '../actions/CartDetailAction';
 
 const Specifications = ({ dimension, material }) => {
     return(
@@ -77,7 +77,6 @@ class ProductDetails extends Component {
     showModal(){
         this.setState({ showModal: true });
     }
-    
     hideModal() {
         this.setState({ showModal: false });
     }
@@ -88,15 +87,17 @@ class ProductDetails extends Component {
     }
     componentWillReceiveProps(newProps){
         if(newProps.updateRating){
+            this.props.getProductDetails(this.state.product_id);
             if(newProps.errorRating != undefined && newProps.errorRating != ''){
                 notify.show(newProps.errorRating, 'error', 1000);
             }else{
                 notify.show(newProps.successRating, 'success', 1000);
             }
-            this.props.getProductDetails(this.state.product_id);
         }
         if(newProps.addCartFlag){
             notify.show("Product successfully added to cart", 'success', 1000);
+            this.props.setFlagStatus();
+            this.props.loader(false);
         }
     }
     rateProduct(){
@@ -104,6 +105,7 @@ class ProductDetails extends Component {
         this.setState({ showModal: false });
     }
     addToCartHandler(product){
+        this.props.loader(true);
         var cart = [];
         let new_obj = JSON.parse(JSON.stringify(product));
         cart.push(new_obj);
@@ -218,7 +220,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getProductDetails: (id) => { dispatch(getProductDetails(id)) },
         productRating: (ratingDetails) => { dispatch(productRating(ratingDetails)) },
-        addToCart: (cartData) => { dispatch(addToCart(cartData)) }
+        addToCart: (cartData) => { dispatch(addToCart(cartData)) },
+        setFlagStatus: () => { dispatch(setFlagStatus()) }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetails);

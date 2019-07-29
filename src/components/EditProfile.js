@@ -60,6 +60,7 @@ class EditProfile extends Component{
     }
     editProfile(e){
         e.preventDefault();
+        this.props.loader(true);
         let formData = new FormData();
         let item = this.state;
         for ( var key in item ) {

@@ -40,6 +40,7 @@ class AddAddress extends Component{
         });
     }
     addAddress(e){
+        this.props.loader(true);
         e.preventDefault();
         this.props.addUserAddress(this.state);
     }

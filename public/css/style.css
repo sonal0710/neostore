@@ -3,24 +3,23 @@
         width: 970px;
     }
 }
-
 html {
     position: relative;
     min-height: 100%;
 }
-
 body {
     margin: 0 0 250px;
 }
-
 .carousel-slider .slide-image{
     height: 682px;
 }
-
 .pagination{
     padding-left:15px;
 }
-
 .css-79elbk{
     position:initial !important
+}
+.thankyou{
+    text-align: center;
+    color: blueviolet;
 }

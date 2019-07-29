@@ -33,12 +33,18 @@ export default (state = {}, action) => {
         case 'GET_ALL_PRODUCTS':
             return {
                 ...state,
-                allProducts: action.payload
+                allProducts: action.payload,
+                setFlagForProps: true
             }
         case 'TOTAL_PRODUCT_COUNT':
             return {
                 ...state,
                 totalProductCount: action.payload
+            }
+        case 'SET_FLAG':
+            return {
+                ...state,
+                setFlagForProps: false
             }
      default:
       return state

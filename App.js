@@ -20,12 +20,13 @@ import ListAllProduct from './src/components/ListAllProduct';
 import OrderHistory from './src/components/OrderHistory';
 import CheckoutAddress from './src/components/CheckoutAddress';
 import Cart from './src/components/Cart';
+import ThankyouPage from './src/components/ThankyouPage';
+import CheckoutHeader from './src/components/CheckoutHeader';
+import LoadingOverlay from 'react-loading-overlay';
 import './public/css/navbar.css';
 import './public/css/footer.css';
 import './public/css/style.css';
 import './public/css/user.css';
-import ThankyouPage from './src/components/ThankyouPage';
-import LoadingOverlay from 'react-loading-overlay';
 
 class App extends Component {
     constructor(){
@@ -39,10 +40,16 @@ class App extends Component {
         this.setState({
             isActive: flag
         }, () => {
-            console.log(this.state.isActive);
+            // console.log(this.state.isActive);
         })
     }
     render() {
+        let HideHeader = '';
+        if ((window.location.pathname !== '/thankyou') && (window.location.pathname !== '/checkaddress')){
+            HideHeader = <Header/>  
+        }else{
+            HideHeader = <CheckoutHeader/>
+        }
         return(
             <LoadingOverlay
                 active={this.state.isActive}
@@ -52,9 +59,9 @@ class App extends Component {
             <div>
                 <Router history={browserHistory}>
                     <div>
-                        <Header />
+                        {HideHeader}
                         <Switch>
-                            <Route exact path = '/' component = {Banner} />
+                            <Route exact path = '/' render={(props) =>  <Banner loader={this.loaderHandler}/> } />
                             <Route path = '/terms' component = {Terms} />
                             <Route path = '/returnpolicy' component = {ReturnPolicy} />
                             <Route path = '/contact' component = {Contact} />
@@ -62,14 +69,14 @@ class App extends Component {
                             <Route path = '/locate' component = {LocateUs} />
                             <Route path = '/login' component = {Login} />
                             <Route path = '/register' component = {Register} />
-                            <Route path = '/listAllProduct' render={(props) =>  <ListAllProduct loader={this.loaderHandler}/> } />
-                            <Route path = '/productDetails/:id' component={ProductDetails} />
-                            <Route path = '/orders' render={(props) => (localStorage.getItem('loginstatus') ? <OrderHistory /> : (<Redirect to="/login" />))} />
-                            <Route path = '/profile' render={(props) => (localStorage.getItem('loginstatus') ? <Profile /> : (<Redirect to="/login" />))}/>
-                            <Route path = '/edit_profile' render={(props) => (localStorage.getItem('loginstatus') ? <EditProfile /> : (<Redirect to="/login" />))}/>
-                            <Route path = '/address' render={(props) => (localStorage.getItem('loginstatus') ? <Addresses /> : (<Redirect to="/login" />))}/>
-                            <Route path = '/add_address' render={(props) => (localStorage.getItem('loginstatus') ? <AddAddress /> : (<Redirect to="/login" />))}/>
-                            <Route path = '/edit_address/:id' render={(props) => (localStorage.getItem('loginstatus') ? <EditAddress {...props}/> : (<Redirect to="/login" />))}/>
+                            <Route path = '/listAllProduct' render={(props) =>  <ListAllProduct {...props} loader={this.loaderHandler}/> } />
+                            <Route path = '/productDetails/:id' render={(props) =>  <ProductDetails {...props} loader={this.loaderHandler}/> }  />
+                            <Route path = '/orders' render={(props) => (localStorage.getItem('loginstatus') ? <OrderHistory loader={this.loaderHandler}/> : (<Redirect to="/login" />))} />
+                            <Route path = '/profile' render={(props) => (localStorage.getItem('loginstatus') ? <Profile loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
+                            <Route path = '/edit_profile' render={(props) => (localStorage.getItem('loginstatus') ? <EditProfile loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
+                            <Route path = '/address' render={(props) => (localStorage.getItem('loginstatus') ? <Addresses loader={this.loaderHandler} /> : (<Redirect to="/login" />))}/>
+                            <Route path = '/add_address' render={(props) => (localStorage.getItem('loginstatus') ? <AddAddress loader={this.loaderHandler} /> : (<Redirect to="/login" />))}/>
+                            <Route path = '/edit_address/:id' render={(props) => (localStorage.getItem('loginstatus') ? <EditAddress {...props} loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/cart' render={(props) => (localStorage.getItem('loginstatus') ? <Cart loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/checkaddress' render={(props) => (localStorage.getItem('loginstatus') ? <CheckoutAddress loader={this.loaderHandler}/> : (<Redirect to="/login" />))}/>
                             <Route path = '/thankyou' component = {ThankyouPage} />

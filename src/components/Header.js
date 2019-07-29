@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { withRouter } from "react-router-dom";
 
+const history = createBrowserHistory();
 const LoggedIn = ({ logout }) => {
     return(
         <ul className="dropdown-menu">
@@ -25,9 +28,17 @@ class Header extends Component {
     constructor(){
         super();
         this.userLogOut = this.userLogOut.bind(this);
+        this.searchProducts = this.searchProducts.bind(this);
     }
     userLogOut(){
         localStorage.clear();
+    }
+    searchProducts(){
+        var searchString = document.getElementById('search_text').value;
+        this.props.history.push({
+            pathname: '/listAllProduct',
+            search: 'search='+searchString
+        })
     }
     render() {
         return(
@@ -54,9 +65,9 @@ class Header extends Component {
                             <div className="col-md-12">
                             <div className="form-group">
                                 <div className="input-group search-bar">
-                                <input name="search" className="form-control" />
+                                <input name="search" id="search_text" className="form-control" />
                                 <span className="input-group-btn">
-                                    <button type="submit" className="btn btn-default">
+                                    <button type="button" className="btn btn-default" onClick={this.searchProducts}>
                                     <i className="fa fa-search"></i>
                                     </button>
                                 </span>
@@ -89,5 +100,5 @@ class Header extends Component {
         );
     }
 }
-export default Header;
+export default withRouter(Header);
 

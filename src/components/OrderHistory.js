@@ -6,7 +6,11 @@ import { Link } from 'react-router-dom';
 
 class OrderHistory extends Component{
     componentWillMount(){
+        this.props.loader(true);
         this.props.getOrderHistoryDetails();
+    }
+    componentWillReceiveProps(){
+        this.props.loader(false);
     }
     render(){
         return(

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { getAllCategories, getAllColors, getAllProducts, totalProductCount } from '../actions/ProductsDetailAction';
-import { addToCart } from '../actions/CartDetailAction';
+import { getAllCategories, getAllColors, getAllProducts, totalProductCount, setFlagFalse } from '../actions/ProductsDetailAction';
+import { addToCart, setFlagStatus } from '../actions/CartDetailAction';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../../public/css/product-list.css';
@@ -87,11 +87,14 @@ const AllProductList = ({ allProducts, resetFilters, sortFunction, addToCart, pa
                     <button className="pull-right btn btn-primary btn-sm" onClick={resetFilters}>Clear All Filters</button>
                 </div>
                 <br/>
+                {totalItemsCount === 0 && <div className="col-md-12">No Products Found</div>}
                 {allProducts ? allProducts.map((product,i) => (
                     <div className="col-md-4" key={i}>
                     <div className="thumbnail">
                         <div className="img-thumb">
-                        <img className="img-reposive product_list_img" src={process.env.REACT_APP_API_URL+"/"+product.product_image[0]} alt="product_image"/>
+                        <Link to={"/productDetails/"+product.product_id}>
+                            <img className="img-reposive product_list_img" src={process.env.REACT_APP_API_URL+"/"+product.product_image[0]} alt="product_image"/>
+                        </Link>
                         </div>
                         <div className="caption">
                         <p className="elipse-product"><Link to={"/productDetails/"+product.product_id}>{product.product_name}</Link></p>
@@ -127,8 +130,13 @@ const AllProductList = ({ allProducts, resetFilters, sortFunction, addToCart, pa
 class ListAllProduct extends Component{
     constructor(props){
         super(props);
+        console.log(this.props);
+        let categoryId = '';
+        if(this.props.location.state !== undefined){
+            categoryId = this.props.location.state.category_id;
+        }
         this.state = {
-            category_id:'',
+            category_id: categoryId,
             color_id: '',
             sortBy: '',
             order: '',
@@ -196,9 +204,14 @@ class ListAllProduct extends Component{
         }
     }
     componentWillReceiveProps(newProps){
-        this.props.loader(false);
+        if(newProps.setFlagForProps){
+            this.props.loader(false);
+            this.props.setFlagFalse();
+        }
         if(newProps.addCartFlag){
             notify.show("Product successfully added to cart", 'success', 1000);
+            this.props.setFlagStatus();
+            this.props.loader(false);
         }
     }
     handlePageChange(pageNumber){
@@ -236,7 +249,8 @@ const mapStateToProps = (state) => {
         allColors: state.ProductsDetailReducer.allColors,
         allProducts: state.ProductsDetailReducer.allProducts,
         addCartFlag: state.CartDetailReducer.addCartFlag,
-        totalProductCounts: state.ProductsDetailReducer.totalProductCount
+        totalProductCounts: state.ProductsDetailReducer.totalProductCount,
+        setFlagForProps: state.ProductsDetailReducer.setFlagForProps
     }
 }
 const mapDispatchToProps = (dispatch) => {
@@ -245,7 +259,9 @@ const mapDispatchToProps = (dispatch) => {
         getAllColors: () => { dispatch(getAllColors()) },
         getAllProducts: (sortParameters) => { dispatch(getAllProducts(sortParameters)) },
         addToCart: (cartData) => { dispatch(addToCart(cartData)) },
-        totalProductCount: (param) => { dispatch(totalProductCount(param)) }
+        totalProductCount: (param) => { dispatch(totalProductCount(param)) },
+        setFlagStatus: () => { dispatch(setFlagStatus()) },
+        setFlagFalse: () => { dispatch(setFlagFalse()) }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ListAllProduct);

@@ -18,6 +18,11 @@ export default (state = {}, action) => {
                 ...state,
                 addCartFlag: true
                 }
+        case 'SET_FLAG':
+            return {
+                ...state,
+                addCartFlag: false
+                }
      default:
       return state
     }

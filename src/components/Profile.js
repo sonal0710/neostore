@@ -7,7 +7,10 @@ import { connect } from 'react-redux';
 
 class Profile extends Component{
     componentWillMount(){
+        this.props.loader(false);
         this.props.setFalseFlag();
+    }
+    componentWillReceiveProps(){
     }
     render(){
         return(

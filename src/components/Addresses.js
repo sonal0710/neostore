@@ -10,12 +10,17 @@ class Addresses extends Component{
         this.deleteAddress = this.deleteAddress.bind(this);
     }
     componentWillMount(){
+        this.props.loader(true);
         this.props.getAddresses();
     }
     deleteAddress(e){
+        this.props.loader(true);
         let addressId = e.target.getAttribute('address_id');
         this.props.deleteUserAddress(addressId);
         this.props.getAddresses();
+    }
+    componentWillReceiveProps(){
+        this.props.loader(false);
     }
     render(){
         return(

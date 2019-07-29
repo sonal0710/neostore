@@ -73,3 +73,10 @@ export const totalProductCount = (sortParameters) => dispatch => {
         })
     })
 }
+
+export const setFlagFalse = () => dispatch => {
+    dispatch({
+            type: 'SET_FLAG',
+            payload: false,
+        })
+}

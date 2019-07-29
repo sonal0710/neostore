@@ -36,7 +36,6 @@ class EditAddress extends Component{
         let addressDetails = addresses.filter( function (add) {
             return add._id === addressId
         });
-        console.log(addressDetails);
         this.setState({
             address_id: addressId,
             address: addressDetails[0].address,
@@ -56,6 +55,7 @@ class EditAddress extends Component{
         });
     }
     updateAddress(){
+        this.props.loader(true);
         this.props.editUserAddress(this.state);
     }
     render(){

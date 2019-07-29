@@ -6,8 +6,12 @@ import { Link } from 'react-router-dom';
 
 class Banner extends Component {
     componentWillMount(){
+        this.props.loader(true);
         this.props.getBanners();
         this.props.getFeturedProductList();
+    }
+    componentWillReceiveProps(){
+        this.props.loader(false);
     }
     render() {
         return(
@@ -23,7 +27,12 @@ class Banner extends Component {
                         <div className="carousel-inner" role="listbox">
                             {(this.props.banners !== undefined) && this.props.banners.product.map((bannerDetails, i) => (
                                 <div className={(i === 0) ? "item active":"item"} key={i}>
-                                    <Link to={"/listAllProduct"}><img className="slide-image" src={process.env.REACT_APP_API_URL+"/"+bannerDetails.category_image} alt=""/></Link>
+                                    <Link to={{
+                                        pathname: "/listAllProduct",
+                                        state: {
+                                            category_id: bannerDetails._id
+                                        }
+                                    }}><img className="slide-image" src={process.env.REACT_APP_API_URL+"/"+bannerDetails.category_image} alt=""/></Link>
                                     <div className="carousel-caption">
                                         <h4>{bannerDetails.category_name.charAt(0).toUpperCase() + bannerDetails.category_name.slice(1)}</h4>
                                     </div>
