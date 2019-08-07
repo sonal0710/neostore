@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { userLogin } from '../actions/UserLoginAction';
+import { userLogin, loginStatusFalse } from '../actions/UserLoginAction';
 import { connect } from 'react-redux';
 import Form from 'react-validation/build/form';
 import Input from 'react-validation/build/input';
@@ -11,7 +11,7 @@ import '../../public/css/login.css';
 const required = (value) => {
     if (!value.toString().trim().length) {
       return(
-          <span className="error">Required</span>
+          <span className="error-msg">Required</span>
       );
     }
 };
@@ -19,7 +19,7 @@ const required = (value) => {
 const email = (value) => {
     if (!validator.isEmail(value)) {
         return (
-        <span className="error">{value} is not a valid email.</span>);
+        <span className="error-msg">{value} is not a valid email.</span>);
     }
 };
 
@@ -43,6 +43,7 @@ class Login extends Component {
         });
     }
     checkLoginCredentials(){
+        this.props.loader(true);
         const loginDetails = {
             email: this.state.email,
             password: this.state.password
@@ -51,7 +52,16 @@ class Login extends Component {
     }
     redirectToDashboard(){
         if(this.props.loginStatus){
+            // this.props.getAllCartDetails();
+            this.props.loginStatusFalse();
+            this.props.loader(false);
             return <Redirect to="/" />
+        }
+    }
+    componentWillReceiveProps(newProps){
+        if(!newProps.loginStatus){
+            this.props.loginStatusFalse();
+            this.props.loader(false);
         }
     }
     render() {
@@ -72,7 +82,7 @@ class Login extends Component {
                         <p className="text-muted text-center">--OR USING--</p>
 
                         <Form className="form-custom" >
-                        {(this.props.loginMessage) && <p className="error">{this.props.loginMessage}</p>}
+                        {(this.props.loginMessage) && <p className="error-msg">{this.props.loginMessage}</p>}
                         <div className="form-group">
                             <Input type="email" className="form-control" placeholder="Email Address" name="email" onChange={this.inputChangeHandler} validations={[required, email]} value={this.state.email} />
                         </div>
@@ -94,12 +104,14 @@ class Login extends Component {
 const mapStateToProps = (state) => {
     return {
         loginStatus: state.UserLoginReducer.loginStatus,
-        loginMessage: state.UserLoginReducer.loginMessage
+        loginMessage: state.UserLoginReducer.loginMessage,
+        loginError: state.UserLoginReducer.loginError
     }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        userLogin: (loginDetails) => { dispatch(userLogin(loginDetails)) }
+        userLogin: (loginDetails) => { dispatch(userLogin(loginDetails)) },
+        loginStatusFalse: () => { dispatch(loginStatusFalse()) }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

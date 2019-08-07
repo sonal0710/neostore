@@ -121,7 +121,7 @@ class EditAddress extends Component{
 
                             <hr/>
                             <Button type="button" className="btn btn-default btn-lg" onClick={this.updateAddress}><i className="fa fa-floppy-o"></i>Save</Button>&nbsp;
-                            <Link to="/address" type="button" className="btn btn-default btn-lg"><i className="fa fa-remove"></i>Cancel</Link>
+                            <Link to={this.props.location.state.flag ? "/address" : "/checkaddress"} type="button" className="btn btn-default btn-lg"><i className="fa fa-remove"></i>Cancel</Link>
                         </Form>
 
 

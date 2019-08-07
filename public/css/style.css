@@ -23,3 +23,32 @@ body {
     text-align: center;
     color: blueviolet;
 }
+.disabled{
+    pointer-events: none;
+}
+.list-group-item{
+    cursor: pointer;
+}
+.list-group-item.active>a, .list-group-item.active:focus, .list-group-item.active:hover{
+    color: white !important
+}
+.error-msg{
+    color:red;
+}
+.autocomplete{
+    position: absolute;
+    border-bottom: none;
+    border-top: none;
+    z-index: 99;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding-left: 15px;
+    padding-right: 55px;
+}
+
+.autocomplete div{
+    padding: 10px;
+    background-color: #fff;
+    border-bottom: 1px solid #d4d4d4;
+}

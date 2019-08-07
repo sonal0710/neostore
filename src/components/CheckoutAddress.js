@@ -37,7 +37,6 @@ class CheckoutAddress extends Component{
             cart.push(item.product_id) )):''}
         cart.push({address_id: this.state.delieveryAdd});
         cart.push({flag: true});
-        console.log(cart);
         this.setState({
             redirect: true
         }, () => {
@@ -47,7 +46,7 @@ class CheckoutAddress extends Component{
     render(){
         return(
             <div className="container">
-                {(this.state.redirect) && <Redirect to="/thankyou"/>}
+                {(this.state.redirect) && <Redirect to={{ pathname:"/thankyou", state:{ redirectFlag: true } }}/>}
                 <div className="panel panel-default">
                     <div className="panel-heading">
                         <h3>Select delivery address</h3>

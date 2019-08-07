@@ -46,3 +46,10 @@ export const userRegister = (regisDetails) => dispatch => {
         })
     })
 }
+
+export const loginStatusFalse = () => dispatch => {
+    dispatch({
+        type: 'SET_LOGIN_FLAG',
+        payload: false
+    })
+}

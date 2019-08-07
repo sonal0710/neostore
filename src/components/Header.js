@@ -1,25 +1,27 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-import { withRouter } from "react-router-dom";
+import {debounce} from 'throttle-debounce';
+import { searchProducts } from '../actions/ProductsDetailAction';
+import { connect } from 'react-redux';
 
 const history = createBrowserHistory();
-const LoggedIn = ({ logout }) => {
+const LoggedIn = ({ logout, handler }) => {
     return(
         <ul className="dropdown-menu">
-            <li><Link to="/profile"><i className="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; Profile</Link></li>
-            <li><Link to="/orders"><i className="fa fa-list-alt fa-fw" aria-hidden="true"></i>&nbsp; Orders</Link></li>
-            <li><Link to="/address"><i className="fa fa-address-card-o fa-fw" aria-hidden="true"></i>&nbsp; Addresses</Link></li>
-            <li><a href="#" onClick={logout}><i className="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp; Logout</a></li>
+            <li onClick={handler}><Link to="/profile"><i className="fa fa-user fa-fw" aria-hidden="true"></i>&nbsp; Profile</Link></li>
+            <li onClick={handler}><Link to="/orders"><i className="fa fa-list-alt fa-fw" aria-hidden="true"></i>&nbsp; Orders</Link></li>
+            <li onClick={handler}><Link to="/address"><i className="fa fa-address-card-o fa-fw" aria-hidden="true"></i>&nbsp; Addresses</Link></li>
+            <li onClick={handler}><Link to="/" onClick={logout}><i className="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp; Logout</Link></li>
         </ul>
     );
 }
 
-const LoggedOut = () => {
+const LoggedOut = ({ handler }) => {
     return(
         <ul className="dropdown-menu">
-            <li><Link to="/login"><i className="fa fa-sign-in fa-fw" aria-hidden="true"></i>&nbsp; Login</Link></li>
-            <li><Link to="/register"><i className="fa fa-user-plus fa-fw" aria-hidden="true"></i>&nbsp; Register</Link></li>
+            <li onClick={handler}><Link to="/login"><i className="fa fa-sign-in fa-fw" aria-hidden="true"></i>&nbsp; Login</Link></li>
+            <li onClick={handler}><Link to="/register"><i className="fa fa-user-plus fa-fw" aria-hidden="true"></i>&nbsp; Register</Link></li>
         </ul>
     );
 }
@@ -27,20 +29,52 @@ const LoggedOut = () => {
 class Header extends Component {
     constructor(){
         super();
+        this.state = {
+            searchStr: '',
+            autoFlag: false,
+            loginStatus: false,
+            cartCount: 0
+        }
         this.userLogOut = this.userLogOut.bind(this);
-        this.searchProducts = this.searchProducts.bind(this);
+        this.searchStateHandler = this.searchStateHandler.bind(this);
+        this.stateSetHandler = this.stateSetHandler.bind(this);
+        this.loginHandler = this.loginHandler.bind(this);
     }
     userLogOut(){
         localStorage.clear();
     }
-    searchProducts(){
-        var searchString = document.getElementById('search_text').value;
-        this.props.history.push({
-            pathname: '/listAllProduct',
-            search: 'search='+searchString
+    loginHandler(){
+        this.setState({
+            loginStatus: !this.state.loginStatus
+        })
+    }       
+    searchStateHandler(e){
+        e.persist();
+        debounce(100, () => {
+            if(e.target.value != ''){
+                this.setState({ 
+                    searchStr: e.target.value,
+                    autoFlag: true
+                }, () => {
+                    this.props.searchProducts(e.target.value);
+                })
+            }else{
+                this.setState({
+                    searchStr: '',
+                    autoFlag: false
+                })
+            }
+        })()
+    }
+    stateSetHandler(){
+        this.setState({
+            searchStr: '',
+            autoFlag: false
         })
     }
     render() {
+        // var cartCount = 0;
+        // {(localStorage.hasOwnProperty('cartDetails')) ? cartCount = JSON.parse(localStorage.getItem('cartDetails')).length : cartCount = 0 }
         return(
                 <nav className="navbar navbar-default">
                     <div className="container">
@@ -63,14 +97,19 @@ class Header extends Component {
                         <form autoComplete="off" className="pull-left">
                         <div className="row">
                             <div className="col-md-12">
-                            <div className="form-group">
+                            <div className="">
                                 <div className="input-group search-bar">
-                                <input name="search" id="search_text" className="form-control" />
-                                <span className="input-group-btn">
-                                    <button type="button" className="btn btn-default" onClick={this.searchProducts}>
-                                    <i className="fa fa-search"></i>
-                                    </button>
-                                </span>
+                                    <input name="search" id="search_text" className="form-control" onChange={this.searchStateHandler}/>
+                                    <span className="input-group-btn">
+                                        <span className="btn btn-default">
+                                            <i className="fa fa-search"></i>
+                                        </span>
+                                    </span>
+                                </div>
+                                <div className={this.state.autoFlag ? "autocomplete" : "autocomplete hide"} >
+                                    {((this.props.searchedProducts !== undefined)) ? this.props.searchedProducts.map((product,i) => (
+                                        <Link to={"/productDetails/"+product._id} key={i} onClick={this.stateSetHandler}><div>{product.product_name}</div></Link>
+                                    )) : ''}
                                 </div>
                             </div>
                             </div>
@@ -79,11 +118,11 @@ class Header extends Component {
 
                         <ul className="nav navbar-nav navbar-right">
                         <li className="dropdown">
-                            <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <a href="#" className="dropdown-toggle" data-toggle="dropdown" onClick={this.loginHandler} role="button" aria-haspopup="true" aria-expanded="false">
                                 <i className="fa fa-user fa-lg" area-hidden="true"></i>
                                 <span className="caret"></span>
                             </a>
-                            {(localStorage.getItem('loginstatus')) ? <LoggedIn logout={this.userLogOut} /> : <LoggedOut /> }
+                            {(localStorage.hasOwnProperty('loginstatus')) ? <LoggedIn logout={this.userLogOut} handler={this.loginHandler}/> : <LoggedOut handler={this.loginHandler} /> }
                         </li>
                         </ul>
 
@@ -100,5 +139,15 @@ class Header extends Component {
         );
     }
 }
-export default withRouter(Header);
 
+const mapStateToProps = (state) => {
+    return {
+        searchedProducts: state.ProductsDetailReducer.searchedProducts
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchProducts: (searchStr) => { dispatch(searchProducts(searchStr)) }
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -11,25 +11,25 @@ import '../../public/css/register.css';
 const required = (value) => {
     if (!value.toString().trim().length) {
       return(
-          <span className="error">Required</span>
+          <span className="error-msg">Required</span>
       );
     }
 };
 const email = (value) => {
     if (!validator.isEmail(value)) {
         return (
-        <span className="error">{value} is not a valid email.</span>);
+        <span className="error-msg">{value} is not a valid email.</span>);
     }
 };
 const lt = (value) => {
     if (value.toString().trim().length !== 10) {
-      return <span className="error">Contact No. should be of 10 digits</span>
+      return <span className="error-msg">Contact No. should be of 10 digits</span>
     }
 };
 const password = (value) => {
     let conpassword = document.getElementById('password').value;
     if (value !== conpassword) { 
-      return <span className="error">Passwords are not equal.</span>
+      return <span className="error-msg">Passwords are not equal.</span>
     }
 };
 
@@ -90,7 +90,7 @@ class Register extends Component {
                         <p className="text-muted text-center">--OR USING--</p>
 
                         <Form className="form-custom" autoComplete="on" noValidate>
-                        {(this.props.registrationMessage) && <p className="error">Something went wrong! Try again later.</p>}
+                        {(this.props.registrationMessage) && <p className="error-msg">Something went wrong! Try again later.</p>}
                         <div className="form-group">
                             <Input type="text" className="form-control" placeholder="First Name" value={this.state.first_name} onChange={this.inputChangeHandler} name="first_name" validations={[required]} />
                         </div>

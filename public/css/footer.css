@@ -6,7 +6,7 @@ footer {
     bottom: 0;
     height: 250px;
     width: 100%;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 .footer-links{
     color:white;

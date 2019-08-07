@@ -38,7 +38,7 @@ const CartTotal = ({ cartDetails }) => {
                     </div>            
                 </div>
                 <div className="panel-footer">
-                    <Link type="button" to="/checkaddress" className="btn btn-primary btn-lg btn-block" disabled={cartCount === 0}>Checkout</Link>
+                    <Link type="button" to="/checkaddress" className={(cartCount === 0) ? "btn btn-primary btn-lg btn-block disabled" : "btn btn-primary btn-lg btn-block"} disabled={cartCount === 0}>Checkout</Link>
                 </div>
             </div>
         </div>

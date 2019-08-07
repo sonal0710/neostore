@@ -150,3 +150,10 @@
     align-items: center;
     margin: 1rem 0;
    }
+
+   /* @media (min-width: 481px) and (max-width: 767px) {
+     .actual-img1 img{
+       height: 250px !important;
+       width: 200px !important;
+     }
+   } */

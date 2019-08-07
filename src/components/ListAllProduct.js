@@ -8,7 +8,7 @@ import StarRatingComponent from 'react-star-rating-component';
 import Notifications, { notify } from 'react-notify-toast';
 import Pagination from "react-js-pagination";
 
-const AllCategories = ({ allCategories, sortHandler }) => {
+const AllCategories = ({ allCategories, sortHandler, categoryId }) => {
     return(
         <div className="panel panel-danger">
             <div className="panel-heading" role="tab" id="headingOne">
@@ -21,7 +21,7 @@ const AllCategories = ({ allCategories, sortHandler }) => {
             <div id="categories" className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
             <div className="list-group">
                 {allCategories ? allCategories.map((categoryDetail,i) => (
-                    <li className="list-group-item" key={i}>
+                    <li className={(categoryId === categoryDetail._id) ? "list-group-item active" : "list-group-item"} key={i}>
                         <a category_id={categoryDetail._id} onClick={sortHandler} name="category_id"><i className="fa fa-dot-circle-o"></i>  {categoryDetail.category_name.charAt(0).toUpperCase() + categoryDetail.category_name.slice(1)}</a>
                     </li>
                 )) : ''}
@@ -130,10 +130,13 @@ const AllProductList = ({ allProducts, resetFilters, sortFunction, addToCart, pa
 class ListAllProduct extends Component{
     constructor(props){
         super(props);
-        console.log(this.props);
         let categoryId = '';
         if(this.props.location.state !== undefined){
-            categoryId = this.props.location.state.category_id;
+            if(this.props.location.state.category_id){
+                categoryId = this.props.location.state.category_id;
+            }else{
+                categoryId = '';
+            }
         }
         this.state = {
             category_id: categoryId,
@@ -159,8 +162,16 @@ class ListAllProduct extends Component{
         this.props.loader(true);
         let name = e.target.name;
         let value = e.target.getAttribute(name);
+        if(name === 'category_id'){
+            var elems = document.querySelectorAll(".list-group-item");
+            [].forEach.call(elems, function(el) {
+                el.classList.remove("active");
+            });
+            e.target.parentNode.classList.add("active");
+        }
         this.setState({
-            [name]: value
+            [name]: value,
+            activePage: 1
         }, () => {
             this.props.getAllProducts(this.state)
             this.props.totalProductCount(this.state)
@@ -177,6 +188,15 @@ class ListAllProduct extends Component{
         }, () => {
             this.props.getAllProducts(this.state)
             this.props.totalProductCount(this.state)
+        });
+        // Removed active classes
+        var elems = document.querySelectorAll(".list-group-item");
+        [].forEach.call(elems, function(el) {
+            el.classList.remove("active");
+        });
+        var elems = document.querySelectorAll(".nav-item");
+        [].forEach.call(elems, function(el) {
+            el.classList.remove("active");
         });
     }
     sortProducts(e){
@@ -200,6 +220,7 @@ class ListAllProduct extends Component{
         if(localStorage.getItem('logintoken')){
             this.props.addToCart(cart);
         }else{
+            this.props.loader(false);
             notify.show('Please login first', 'error', 1000);
         }
     }
@@ -231,7 +252,7 @@ class ListAllProduct extends Component{
                 <div className="row">
                 <div className="col-md-3">
                     <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                        <AllCategories allCategories={this.props.allCategories} sortHandler={this.categoryColorSortHandler}/>
+                        <AllCategories allCategories={this.props.allCategories} sortHandler={this.categoryColorSortHandler} categoryId={this.state.category_id}/>
                         <AllColors allColors={this.props.allColors} sortHandler={this.categoryColorSortHandler}/>
                     </div>
                 </div>

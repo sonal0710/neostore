@@ -8,13 +8,15 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 loginStatus: true,
-                loginMessage: action.payload.message
+                loginMessage: '',
+                loginError: false
             }
         case 'USER_LOGIN_FAILED':
             return {
                 ...state,
                 loginStatus: false,
-                loginMessage: action.payload.message
+                loginMessage: 'Invalid Credentials',
+                loginError: true
             }
         case 'USER_REGISTER':
             return {
@@ -27,6 +29,12 @@ export default (state = {}, action) => {
                 ...state,
                 registrationStatus: false,
                 registrationMessage: action.payload.message
+            }
+        case 'SET_LOGIN_FLAG':
+            return{
+                ...state,
+                loginStatus: false,
+                loginError: false
             }
      default:
       return state

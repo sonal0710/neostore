@@ -59,7 +59,7 @@ export const getAllProducts = (sortParameters) => dispatch => {
     .then(res => {
         dispatch({
             type: 'GET_ALL_PRODUCTS',
-            payload: res.data.product,
+            payload: res.data.product
         })
     })
 }
@@ -79,4 +79,19 @@ export const setFlagFalse = () => dispatch => {
             type: 'SET_FLAG',
             payload: false,
         })
+}
+
+export const searchProducts = (searchStr) => dispatch => {
+    axios.get(process.env.REACT_APP_API_URL+'/suggestion?text='+searchStr)
+    .then(res => {
+        dispatch({
+                type: 'SEARCH_PRODUCTS',
+                payload: res.data,
+        })
+    }).catch(err => {
+        dispatch({
+            type: 'SEARCH_PRODUCTS_ERR',
+            payload: err,
+        })
+    })
 }

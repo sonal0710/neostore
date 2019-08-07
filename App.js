@@ -67,7 +67,7 @@ class App extends Component {
                             <Route path = '/contact' component = {Contact} />
                             <Route path = '/privacypolicy' component = {PrivacyPolicy} />
                             <Route path = '/locate' component = {LocateUs} />
-                            <Route path = '/login' component = {Login} />
+                            <Route path = '/login' render={() =>  <Login loader={this.loaderHandler}/> } />
                             <Route path = '/register' component = {Register} />
                             <Route path = '/listAllProduct' render={(props) =>  <ListAllProduct {...props} loader={this.loaderHandler}/> } />
                             <Route path = '/productDetails/:id' render={(props) =>  <ProductDetails {...props} loader={this.loaderHandler}/> }  />

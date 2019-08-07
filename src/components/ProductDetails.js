@@ -6,6 +6,16 @@ import StarRatingComponent from 'react-star-rating-component';
 import Notifications, { notify } from 'react-notify-toast';
 import Magnifier from "react-magnifier";
 import { addToCart, setFlagStatus } from '../actions/CartDetailAction';
+import {
+    FacebookShareButton,
+    FacebookIcon,
+    LinkedinShareButton,
+    LinkedinIcon,
+    WhatsappShareButton,
+    WhatsappIcon,
+    EmailShareButton,
+    EmailIcon
+  } from 'react-share';
 
 const Specifications = ({ dimension, material }) => {
     return(
@@ -87,6 +97,13 @@ class ProductDetails extends Component {
         });
     }
     componentWillReceiveProps(newProps){
+        if(newProps.match.params.id !== this.props.match.params.id){
+            this.props.loader(true);
+            this.setState({ product_id: newProps.match.params.id }
+            ,() => {
+                this.props.getProductDetails(newProps.match.params.id);
+            });
+        }
         if(newProps.setFlagForProps){
             this.props.loader(false);
             this.props.setFlagFalse();
@@ -119,6 +136,7 @@ class ProductDetails extends Component {
         if(localStorage.getItem('logintoken')){
             this.props.addToCart(cart);
         }else{
+            this.props.loader(false);
             notify.show('Please login first', 'error', 1000);
         }
     }
@@ -132,7 +150,7 @@ class ProductDetails extends Component {
                     <div className="col-md-6">
                         <div className="preview">
                         <div className="preview-pic tab-content">
-                            <div className="my-img active"><Magnifier className="actual-img" height={250} src={this.props.productDetails ? process.env.REACT_APP_API_URL+"/"+this.props.productDetails.product_image[0] : ''}/></div>
+                            <div className="my-img active"><Magnifier className="actual-img1" height={250} src={this.props.productDetails ? process.env.REACT_APP_API_URL+"/"+this.props.productDetails.product_image[0] : ''}/></div>
                         </div>
                         <br />
                         <ul className="preview-thumbnail nav nav-tabs">
@@ -170,11 +188,10 @@ class ProductDetails extends Component {
                                 <i className="fa fa-share-alt fa-lg"></i>
                             </h4>
                             <div className="share-container">
-                            <a href="#" className="btn btn-primary"><i className="fa fa-lg fa-facebook"></i></a>&nbsp;
-                            <a href="#" className="btn btn-danger"><i className="fa fa-lg fa-google"></i></a>&nbsp;
-                            <a href="#" className="btn btn-info"><i className="fa fa-lg fa-twitter"></i></a>&nbsp;
-                            <a href="#" className="btn btn-primary"><i className="fa fa-lg fa-linkedin"></i></a>&nbsp;
-                            <a href="#" className="btn btn-success"><i className="fa fa-lg fa-whatsapp"></i></a>
+                            <FacebookShareButton url="www.google.com"><FacebookIcon size={35} round={true}/></FacebookShareButton>
+                            <LinkedinShareButton url="www.google.com"><LinkedinIcon size={35} round={true}/></LinkedinShareButton>
+                            <WhatsappShareButton url="www.google.com"><WhatsappIcon size={35} round={true}/></WhatsappShareButton>
+                            <EmailShareButton url="www.google.com"><EmailIcon size={35} round={true}/></EmailShareButton>
                             </div>
                         </div>
             

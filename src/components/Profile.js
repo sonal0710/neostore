@@ -10,8 +10,8 @@ class Profile extends Component{
         this.props.loader(false);
         this.props.setFalseFlag();
     }
-    componentWillReceiveProps(){
-    }
+    // componentWillReceiveProps(){
+    // }
     render(){
         return(
             <div className="container">

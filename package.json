@@ -45,12 +45,14 @@
     "react-redux": "^5.1.1",
     "react-router": "^5.0.1",
     "react-router-dom": "^4.3.1",
+    "react-share": "^3.0.0",
     "react-star-rating-component": "^1.4.1",
     "react-validate-form": "^1.0.6",
     "react-validation": "^3.0.7",
     "redux": "^3.7.2",
     "redux-immutable-state-invariant": "^2.1.0",
     "redux-thunk": "^2.2.0",
+    "throttle-debounce": "^2.1.0",
     "validator": "^9.4.1"
   },
   "devDependencies": {

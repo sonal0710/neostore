@@ -19,7 +19,7 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 updateRating: true,
-                errorRating: 'Already Rated'
+                errorRating: action.payload.message
             }
         case 'GET_CATEGORIES':
             return {
@@ -46,6 +46,16 @@ export default (state = {}, action) => {
             return {
                 ...state,
                 setFlagForProps: false
+            }
+        case 'SEARCH_PRODUCTS':
+            return{
+                ...state,
+                searchedProducts: action.payload.product
+            }
+        case 'SEARCH_PRODUCTS_ERR':
+            return{
+                ...state,
+                searchedProducts: []
             }
      default:
       return state
